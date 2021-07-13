@@ -26,6 +26,7 @@ include(GrPlatform) #define LIB_SUFFIX
 list(APPEND ble_sources
     preamble_impl.cc
     whiten_impl.cc
+    packet_sink_impl.cc
 )
 
 set(ble_sources "${ble_sources}" PARENT_SCOPE)

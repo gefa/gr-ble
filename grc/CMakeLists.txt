@@ -20,5 +20,6 @@
 
 install(FILES
     ble_preamble.block.yml
-    ble_whiten.block.yml DESTINATION share/gnuradio/grc/blocks
+    ble_whiten.block.yml
+    ble_packet_sink.block.yml DESTINATION share/gnuradio/grc/blocks
 )

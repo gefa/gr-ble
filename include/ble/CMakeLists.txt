@@ -24,5 +24,6 @@
 install(FILES
     api.h
     preamble.h
-    whiten.h DESTINATION include/ble
+    whiten.h
+    packet_sink.h DESTINATION include/ble
 )
