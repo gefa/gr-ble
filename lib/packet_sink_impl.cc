@@ -73,7 +73,7 @@ namespace gr {
             frame_struct.PDU_type =  (unsigned char)((header_data & 0x00000f00) >> 8);
             frame_struct.TxAdd    =  (unsigned char)((header_data & 0x00002000) >> 13);
             frame_struct.RxAdd    =  (unsigned char)((header_data & 0x00001000) >> 12);
-            std::cout << std::hex << int(frame_struct.PDU_type) << endl;
+            //std::cout << std::hex << int(frame_struct.PDU_type) << endl;
         }
         else{
         //Data frame
@@ -82,7 +82,7 @@ namespace gr {
         }
     //FIXME :  length max ???!!!!!!
         if(frame_struct.length >= 250 || frame_struct.length <= 1){
-            cout << "Length error" << endl;
+            //cout << "Length error" << endl;
             return 1;
         }
 
@@ -318,9 +318,10 @@ namespace gr {
                                 buf[6] = 0x00; //Unused
                                 buf[7] = 0x00; //Unused
 
-                                std::memcpy(buf+8, frame_struct.frame , (frame_struct.length + 3 + 6) );
-
-                                pmt::pmt_t payload = pmt::make_blob(buf, (frame_struct.length + 3 + 6 + 8) ); //+8 for the preamble BT4LE
+                                // std::memcpy(buf+8, frame_struct.frame , (frame_struct.length + 3 + 6) );
+                                // pmt::pmt_t payload = pmt::make_blob(buf, (frame_struct.length + 3 + 6 + 8) ); //+8 for the preamble BT4LE
+                                std::memcpy(buf+0, frame_struct.frame , (frame_struct.length + 3 + 6) );
+                                pmt::pmt_t payload = pmt::make_blob(buf, (frame_struct.length + 3 + 6 + 0 ));
                                 message_port_pub(pmt::mp("out"), pmt::cons(meta, payload));
                                 data_shift=0;
                                 frame_shift = 0;
@@ -330,7 +331,7 @@ namespace gr {
                                 frame_shift = 0;
                                 data_shift=0;
                                 state = PREAMBLE_SEARCH;
-                                std::cout << "BAD CRC" << std::endl;
+                                //std::cout << "BAD CRC" << std::endl;
                             }
     #ifdef verbose_state
         cout << "state = 0" << endl;
