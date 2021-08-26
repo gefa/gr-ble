@@ -43,7 +43,9 @@ namespace gr {
         int chan_nbr;
         unsigned char frame_type;
         unsigned char whitening_reg;
-        unsigned char init_whitening_reg;
+        unsigned char init_whitening_reg37;
+        unsigned char init_whitening_reg38;
+        unsigned char init_whitening_reg39;
         unsigned int frame_shift_reg;
       unsigned int frame_shift;
         unsigned int data_shift;

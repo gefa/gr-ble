@@ -191,9 +191,11 @@ namespace gr {
         state = PREAMBLE_SEARCH;
         data_shift = 0;
         //Load init value of LFSR :
-        init_whitening_reg = (swap8bits(chan_nbr)  | 0x02);
+        init_whitening_reg37 = (swap8bits(37)  | 0x02);
+        init_whitening_reg38 = (swap8bits(38)  | 0x02);
+        init_whitening_reg39 = (swap8bits(39)  | 0x02);
         //Init
-        whitening_reg = init_whitening_reg; // Init of whitening
+        whitening_reg = init_whitening_reg37; // Init of whitening
         //default value of frame_shift_reg
         frame_shift_reg = 0x00000000;
         message_port_register_out(pmt::mp("out"));
@@ -224,7 +226,7 @@ namespace gr {
             else frame_shift_reg = frame_shift_reg << 1;
                     //looking for a match in the acces addr table
                     if(acces_addr_check() == 1){ //return 1 if found
-                        whitening_reg = init_whitening_reg; // Init of whitening
+                        //whitening_reg = init_whitening_reg; // Init of whitening
                         state = HEADER_READING;
                         frame_shift = 40; //preamble + acces_addr 32 + 8bits
     #ifdef verbose_state
@@ -244,26 +246,66 @@ namespace gr {
             //wait for 56 shift to have the header in the first
                     if(frame_shift == 56){
                         unsigned int unwhiten_head;
+                        whitening_reg = init_whitening_reg37;
                         unwhiten_head = (unwhitening(((frame_shift_reg & 0x0000FF00) >> 8))) << 8;
                         unwhiten_head |= unwhitening((frame_shift_reg & 0x000000FF));
                         if(read_header(unwhiten_head) == 0){
-                            //TODO : added a check on PDU_TYPE
-                            if(frame_struct.PDU_type <= 6  && frame_struct.frame_type == 0){
-                            data_shift=0;
-                            state = READ_DATA;
-    #ifdef verbose_state
-            cout << "state = 3" << endl;
-    #endif
-                            break;
-                            }
-                            else{
-                             frame_shift = 0;
-                            //error back to search preamble
-                            state = PREAMBLE_SEARCH;
-                            break;
+                                                    //TODO : added a check on PDU_TYPE
+                                                    if(frame_struct.PDU_type <= 6  && frame_struct.frame_type == 0){
+                                                    data_shift=0;
+                                                    state = READ_DATA;
+                            #ifdef verbose_state
+                                    cout << "state = 3" << endl;
+                            #endif
+                                                    break;
                             }
                         }
-                        else
+                        whitening_reg = init_whitening_reg38;
+                        unwhiten_head = (unwhitening(((frame_shift_reg & 0x0000FF00) >> 8))) << 8;
+                        unwhiten_head |= unwhitening((frame_shift_reg & 0x000000FF));
+                        if(read_header(unwhiten_head) == 0){
+                                                    //TODO : added a check on PDU_TYPE
+                                                    if(frame_struct.PDU_type <= 6  && frame_struct.frame_type == 0){
+                                                    data_shift=0;
+                                                    state = READ_DATA;
+                            #ifdef verbose_state
+                                    cout << "state = 3" << endl;
+                            #endif
+                                                    break;
+                            }
+                        }
+                        whitening_reg = init_whitening_reg39;
+                        unwhiten_head = (unwhitening(((frame_shift_reg & 0x0000FF00) >> 8))) << 8;
+                        unwhiten_head |= unwhitening((frame_shift_reg & 0x000000FF));
+                        if(read_header(unwhiten_head) == 0){
+                                                    //TODO : added a check on PDU_TYPE
+                                                    if(frame_struct.PDU_type <= 6  && frame_struct.frame_type == 0){
+                                                    data_shift=0;
+                                                    state = READ_DATA;
+                            #ifdef verbose_state
+                                    cout << "state = 3" << endl;
+                            #endif
+                                                    break;
+                            }
+                        }
+    //                     if(read_header(unwhiten_head) == 0){
+    //                         //TODO : added a check on PDU_TYPE
+    //                         if(frame_struct.PDU_type <= 6  && frame_struct.frame_type == 0){
+    //                         data_shift=0;
+    //                         state = READ_DATA;
+    // #ifdef verbose_state
+    //         cout << "state = 3" << endl;
+    // #endif
+    //                         break;
+    //                         }
+    //                         else{
+    //                          frame_shift = 0;
+    //                         //error back to search preamble
+    //                         state = PREAMBLE_SEARCH;
+    //                         break;
+    //                         }
+    //                     }
+    //                     else
                         {
                             frame_shift = 0;
                             //error back to search preamble
